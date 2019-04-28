@@ -57,7 +57,7 @@ namespace DLLHijacker
     inline BOOL WINAPI Load()
     {
         TCHAR tzPath[MAX_PATH];
-        lstrcpy(tzPath, TEXT("common\\TEAMPLATE_DLLNAME"));
+        lstrcpy(tzPath, TEXT("TEAMPLATE_DLLNAME"));
         m_hModule = LoadLibrary(tzPath);
         if (m_hModule == NULL)
             return FALSE;
